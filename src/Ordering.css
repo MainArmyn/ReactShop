@@ -1,0 +1,254 @@
+.order__form{
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  background-color: transparent;
+  width: 100%;
+  background-position: center;
+  box-sizing: border-box;
+  margin-top: 100px;
+  padding: 20px 16px 0px;
+}
+
+.order__form__reg{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order__form__reg__title{
+  margin-bottom: 4px;
+  color: var(--black, #282828);
+  font-family: Marmelad;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 550;
+  line-height: normal;
+}
+
+.order__form__reg__name{
+  display: flex;
+  opacity: 0.6;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--gray, #ACACAC);
+  overflow: hidden;
+  color: var(--black, #282828);
+  text-overflow: ellipsis;
+  font-family: Bellota Text;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.order__form__reg__tel{
+  padding: 12px 20px;
+  opacity: 0.6;
+  border-radius: 8px;
+  border: 1px solid var(--gray, #ACACAC);
+  overflow: hidden;
+  color: var(--black, #282828);
+  text-overflow: ellipsis;
+  font-family: Bellota Text;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.order__form__reg__email{
+  padding: 12px 20px;
+  border-radius: 8px;
+  opacity: 0.6;
+  border: 1px solid var(--gray, #ACACAC);
+  overflow: hidden;
+  color: var(--black, #282828);
+  text-overflow: ellipsis;
+  font-family: Bellota Text;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.order__form__choose{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order__form__choose__title{
+  margin-bottom: 4px;
+  color: var(--black, #282828);
+  font-family: Marmelad;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 550;
+  line-height: normal;
+}
+
+.order__form__choose__checkbox{
+  display: flex;
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.order__form__choose__checkbox__courier {
+	display: inline-block;
+	user-select: none;
+	position: relative;
+}
+.order__form__choose__checkbox__courier input[type=checkbox] {
+	z-index: -1;
+	opacity: 0;
+	display: block;
+	width: 0;
+	height: 0;
+}
+.order__form__choose__checkbox__courier span {
+	display: flex;
+	cursor: pointer;
+  justify-content: center;
+	padding: 20px 28px;
+  width: 100px;
+  border-radius: 8px;
+  border: 1px solid var(--gray, #ACACAC);
+}
+ 
+/* Checked */
+.order__form__choose__checkbox__courier input[type=checkbox]:checked + span {
+	background: #282828;
+  color: white;
+  transition: all 1s;
+}
+ 
+.order__form__choose__checkbox__pickup {
+	display: inline-block;
+	user-select: none;
+	position: relative;
+}
+.order__form__choose__checkbox__pickup input[type=checkbox] {
+	z-index: -1;
+	opacity: 0;
+	display: block;
+	width: 0;
+	height: 0;
+}
+.order__form__choose__checkbox__pickup span {
+	display: flex;
+  justify-content: center;
+	cursor: pointer;
+	padding: 20px 28px;
+  width: 100px;
+  border-radius: 8px;
+  border: 1px solid var(--gray, #ACACAC);
+}
+ 
+/* Checked */
+.order__form__choose__checkbox__pickup input[type=checkbox]:checked + span {
+	background: #282828;
+  color: white;
+  transition: all 1s;
+}
+
+.order__form__choose__address{
+  padding: 12px 20px;
+  border-radius: 8px;
+  opacity: 0.6;
+  border: 1px solid var(--gray, #ACACAC);
+  overflow: hidden;
+  color: var(--black, #282828);
+  text-overflow: ellipsis;
+  font-family: Bellota Text;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.order__form__payment{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order__form__payment__title{
+  margin-bottom: 4px;
+  color: var(--black, #282828);
+  font-family: Marmelad;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 550;
+  line-height: normal;
+}
+
+.order__form__payment__text{
+  color: var(--black, #282828);
+  text-overflow: ellipsis;
+  font-family: Bellota Text;
+  font-size: 16px;
+  font-style: normal;
+  line-height: normal;
+  font-weight: 100;
+}
+
+.order__form__pay{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order__form__pay__delivery{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-weight: 400;
+}
+
+.order__form__pay__product{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-weight: 400;
+}
+
+.order__form__pay__all{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.order__form__check__label{
+  display: flex;
+  justify-content: center;
+}
+
+.order__form__check input[type=checkbox]:checked {
+	background: #282828;
+  color: white;
+  transition: all 1s;
+}
+
+.order__form__pay__all span:nth-child(2):after {
+  content: " \20BD";
+}
+
+.order__form__pay__product span:nth-child(2)::after {
+  content: " \20BD";
+}
+
+.order__form__choose__checkbox {
+  gap: 20px;
+}
+
+
+.order__form__check__label {
+  margin-bottom: 30px;
+  text-align: left;
+}
+

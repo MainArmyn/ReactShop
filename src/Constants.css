@@ -1,0 +1,32 @@
+:root {
+    --shop-background: white;
+    --vidjet-background: white;/*можно передать и изобржение и просто цвет */
+    --vidjet-border-type: solid;
+    --vidjet-border-color: white;
+    --vidjet-text-color: black;
+    --vidjet-font-family: Helvetica;
+    --logo-text-color: black;/* область логотипа */
+    --logo-font-family: Helvetica;
+    --logo-background: white;
+    --item-list-background: white;/*имеется ввиду вся область с товарами какой будет фон*/
+    --item-list-category-color: green;/*имеется ввиду как будет вот эта полоска с категориями*/
+    --item-list-category-font-family: Arial;
+    --item-list-category-border-color: green;
+    --item-list-category-border-type: solid;
+    --item-list-category-background: white;
+    --item-text-color: black;/*имеется ввиду сама краточка товара*/
+    --item-border-type: solid;
+    --item-border-color: white;
+    --item-background: white;
+    --item-font-family: Arial;
+    --item-choose-category-border-type: solid;/*имеется ввиду про там где у нас рамзеры выбиратьются и так далее также этот тсиль будет дублироваться на раскрытую версию элемента*/
+    --item-choose-category-border-color: black;
+    --item-cart-btn-background: black;/*кнопка коризны ну там добавить в коризну */
+    --item-cart-btn-text-color: white;
+    --item-full-font-family: Arial;/*раскарытая верся товара имеется ввиду */
+    --item-full-background: white;
+    --item-full-description-text-color: black;
+    --item-full-description-border-type: solid;
+    --item-full-description-border-color: green;
+
+}
