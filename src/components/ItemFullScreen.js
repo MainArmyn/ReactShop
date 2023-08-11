@@ -58,7 +58,7 @@ function ItemFulllScreen({item,status,funcToBack,funcToCart}) {
         </Swiper></div>
         <div className="list-item-full__btns">
             <button className="list-item-full__btn" onClick={funcToBack}>Каталог</button>
-            <button className="list-item-full__btn" onClick={funcToCart}>Корзина</button>
+            <button className="cart__btn-out list-item-full__btn" onClick={funcToCart}>Корзина</button>
         </div>
         {item.oldPrice === undefined ? null:<img className="list-item__sale list-item-full__sale" src={saleIcon} alt=""></img>}
         <ChoseClose title={"Размеры"} categories={item.variants} func={ChoseClick}/>

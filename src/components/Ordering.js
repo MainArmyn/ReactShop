@@ -113,7 +113,7 @@ handlerPickUp = () => {
                     <button onClick={() => {
                         this.funcToRender()
                         this.funcToCloseCart()}} className="cart__menu__btn list-item-full__btn">Каталог</button>
-                    <button className="list-item-full__btn" onClick={this.funcToRender}>Корзина</button>
+                    <button className="cart__btn-out list-item-full__btn" onClick={this.funcToRender}>Корзина</button>
                 </div>
                 <div className="cart__menu__info">
                 </div>

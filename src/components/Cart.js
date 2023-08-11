@@ -139,7 +139,7 @@ function Cart({allData,status,funcToClose,funcRerender}) {
             <nav className="cart__menu" style={cartState}>
                 <div className="cart__menu__actions">
                     <button onClick={funcToClose} className="cart__menu__btn list-item-full__btn">Каталог</button>
-                    <span className="cart__menu__title">
+                    <span className="cart__btn-out cart__menu__title">
                         Корзина
                     </span>
                 </div>

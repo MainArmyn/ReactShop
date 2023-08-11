@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import Vidjets from "./Vidjets";
 import ItemList from "./ItemList";
 import LogoShop from "./LogoShop";
