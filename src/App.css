@@ -79,6 +79,11 @@
     box-shadow: 2px 2px 7px 2px rgba(17, 17, 34, 0.09);
 }
 
+.vidjets-container__item:nth-child(1) {
+  margin-left: 20px;
+}
+
+
 .vidjets-container__item__img {
   width: 68px;
   height: 42px;
