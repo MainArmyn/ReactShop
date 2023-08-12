@@ -102,12 +102,14 @@ class ItemList extends React.Component {
              localStorage.setItem("[]",JSON.stringify(arr));
              this.setState({statusBtn: "open",currentBtnText: `Оформить заказ(${1})`})
              e.target.textContent = "Товар добавлен";
+             e.target.classList.remove("popup__btn__active");
             } else {
                  let oldArr = JSON.parse(localStorage.getItem("[]"));
                  oldArr.push({id,choosen});
                  let number = oldArr.length;
                  localStorage.setItem("[]",JSON.stringify(oldArr));
                  e.target.textContent = "Товар добавлен";
+                 e.target.classList.remove("popup__btn__active");
                  this.setState({statusBtn: "open",currentBtnText: `Оформить заказ(${number})`})
  
             }

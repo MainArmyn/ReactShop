@@ -1,19 +1,19 @@
 :root {
-    --vidjet-background: white;/*можно передать и изобржение и просто цвет */
+    --vidjet-background: rgb(52, 52, 211);/*можно передать и изобржение и просто цвет */
     --logo-path: url(./logo.svg);
-    --logo-text-color: black;/* область логотипа */
+    --logo-text-color: rgb(90, 235, 11);/* область логотипа */
     --logo-font-family: Helvetica;
-    --logo-background-color: white;
+    --logo-background-color: rgba(171, 9, 9, 0.538);
     
-    --item-list-background: white;/*имеется ввиду вся область с товарами какой будет фон*/
-    --item-list-category-text-color: green;/*имеется ввиду как будет вот эта полоска с категориями*/
+    --item-list-background: rgb(101, 56, 56);/*имеется ввиду вся область с товарами какой будет фон*/
+    --item-list-category-text-color: rgb(105, 128, 0);/*имеется ввиду как будет вот эта полоска с категориями*/
     --item-list-category-font-family: Arial;
-    --item-list-category-border-color: green;
+    --item-list-category-border-color: rgb(0, 9, 128);
 
-    --item-text-color: black;/*имеется ввиду сама краточка товара*/
+    --item-text-color: rgb(0, 0, 0);/*имеется ввиду сама краточка товара*/
     --item-font-family: Arial;
-    --item-fullView-text-background: white;/* имеется ввиду когда товар развернут*/
-    --item-fullView-description-text-color: black;
-    --item-fullView-description-border-color: green;
+    --item-fullView-text-background: rgb(255, 0, 17);/* имеется ввиду когда товар развернут*/
+    --item-fullView-description-text-color: rgb(0, 0, 0);
+    --item-fullView-description-border-color: rgb(53, 0, 128);
     --all-btns-fontFamily: "Helvetica";
 }

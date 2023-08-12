@@ -1,6 +1,8 @@
 import React from 'react';
 import { Fragment } from "react";
 import '../Ordering.css';
+import InputMask from 'react-input-mask';
+
 
 class Ordering extends React.Component {
 constructor(props) {
@@ -52,26 +54,32 @@ validatePhoneNumber = (phoneNumber) => {
 
 
 handlerValidityForm = (e) => {
-    e.preventDefault();
-    let name = this.validateUsername(this.state.name);
-    let address = this.handlerValidityAddress(this.state.address);
-    let tel = this.validatePhoneNumber(this.state.tel);
-    if (name && tel && address) {
-        let form = new FormData(e.target);//для последещй отправки на сервер
-        this.setState({styleName: {display: "none"},styleTel: {display: "none"}});
-    } else if (name === false){
-        e.target.style.gap = 5 + "px";
-        this.setState({styleName: {display: "block"}});
-        }
-    else if (tel === false) {
-        e.target.style.gap = 5 + "px";
-        this.setState({styleTel: {display : "block"}});
+    e.preventDefault()
+    let name = this.validateUsername(this.state.name)
+    if (name) {
+      //вот здесь данные !!
+      const tg = window.Telegram.WebApp
+      let form = {
+        name: this.state.name,
+        phone: Number(this.state.tel.replace(/\D/g, '')),
+        username: tg.initDataUnsafe?.user.username,
+        queryID: tg.initDataUnsafe?.query_id,
+      }
+
+      fetch("https://bot.lilballerine.thebotique.ru/order/set", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      })
+
+      this.setState({styleName: {display: "none"}, styleTel: {display: "none"}})
+    } else if (name === false) {
+      e.target.style.gap = 5 + "px"
+      this.setState({styleName: {display: "block"}})
     }
-    else if (address === false) {
-        e.target.style.gap = 5 + "px";
-        this.setState({styleAd: {display : "block"}});
-    }
-}
+  }
 
 handlerValidityAddress = (address) => {
     const regex = /^[а-яА-ЯёЁ\s-]+$/; // Регулярное выражение для проверки только русских букв, пробелов и дефисов
@@ -123,8 +131,7 @@ handlerPickUp = () => {
                 <span className="order__form__reg__title">Оформление заказа</span>
                 <input name="name" onChange={this.handlerOnchange} className="order__form__reg__name" type="tel" placeholder="Ваше имя" value={this.state.name} required></input>
                 <span style={this.state.styleName} className="error">Неправильно введено имя можно использовать только буквы!</span>
-                <input maxLength={11} onChange={this.handlerOnchange} onBlur={this.handlerForInputBlur} onFocus={this.handlerForInputFocus} value={this.state.tel} className="order__form__reg__tel" type="tel" name="tel" placeholder="Ваш телефон" required/>
-                <span className="error" style={this.state.styleTel}>Неправильно введён номер телефона!</span>
+                <InputMask value={this.state.tel} onChange={this.handlerOnchange} className="order__form__reg__tel" mask="+7 (999) 999-99-99" placeholder="+7 (___) ___-__-__" name="tel" required/>
                 <input type='email' maxLength={30} className="order__form__reg__email" placeholder="Ваш e-mail"></input>
             </div>
             <div className='order__form__choose'>

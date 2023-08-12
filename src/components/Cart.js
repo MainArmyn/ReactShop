@@ -118,7 +118,8 @@ function Cart({allData,status,funcToClose,funcRerender}) {
     }
     if (currentData === null) {
         alert("Товаров в коризне нету!");
-        return null
+        funcToClose();
+        return null;
     }
     let number = currentData.length;
    const clearInfo = countOccurrences(currentData);
@@ -150,11 +151,11 @@ function Cart({allData,status,funcToClose,funcRerender}) {
             </nav>
 
             <div className="cart__list shop" style={cartState}>
-                {clearInfo.map(item => {
+                {clearInfo.map((item,idx,arr) => {
                     let id = item.element.id;
                     let info = FindCorrect(id);
                     return (
-                        <div className="cart__list__item" data-id={id}>
+                        <div className={`cart__list__item ${idx === arr.length - 1 ? 'cart__list__item__last' : ''}`} data-id={id}>
                             <button className="cart__list__item__delete" onClick={DeleteItem}></button>
                     <div className="cart__list__item__img-category">
                         <img src={info.img[0]} className="cart__list__item__img" alt=""></img>
