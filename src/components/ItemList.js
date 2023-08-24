@@ -23,7 +23,6 @@ class ItemList extends React.Component {
         this.dataItems = this.props.data;
         this.itemFunc = props.func;//будет принимать фукнцию для добавления в корзину которая храниться в родительком компоненте 
         this.categories = ["Все",...Array.from(new Set(this.dataItems.map(el => el.category)))];//категории формируются взависимости от переданных элементов
-        this.ItemShopStyle = {display: "flex",flexDirection: "column",width: "40%",color: this.color,boxShadow: "2px 2px 7px 2px rgba(17, 17, 34, 0.10)",borderRadius: "12px"};
         this.state = {items: this.dataItems,categories: this.categories.map(item => <li key={uuid()} className="category-list__item" onClick={this.handlerForCategory}>{item}</li>),statusItem: "close",currentItem: null,listItems: "",statusBtn: "close",currentBtnText: "",cartStatus: "close"};
         this.count  = 0;
     }
@@ -49,7 +48,9 @@ class ItemList extends React.Component {
         let ident = e.currentTarget.dataset.key;
         this.dataItems.forEach(el => {
             if (el.id === ident) {
-                this.setState({statusItem: "open",currentItem: el,listItems: "list-items__non-active"});
+                let cheeapestPrice = Math.min.apply(null, el.combos.map(item => Number(item.price)));//это мы будем писать от чего то есть цена
+                let cheepestCombo = el.combos.filter(item => Number(item.price) === cheeapestPrice)[0];
+                this.setState({statusItem: "open",currentItem: [el,cheepestCombo],listItems: "list-items__non-active"});
                 return;
             }
         })
@@ -137,29 +138,29 @@ class ItemList extends React.Component {
                 {this.state.categories}
             </ul>
             <div className={`list-items ${this.state.listItems}`}>
-                {this.state.items.map((item,idx) => 
-                <div key={item.id} className="list-item" data-key={item.id} onClick={this.handlerToShow}>
-                    {item.oldPrice === undefined ? null:<img className="list-item__sale" src={saleIcon} alt=""></img>}
+                {this.state.items.map((item,idx) => {
+                    let cheeapestPrice = Math.min.apply(null, item.combos.map(el => Number(el.price)));//это мы будем писать от чего то есть цена
+                    let cheepestCombo = item.combos.filter(el => Number(el.price) === cheeapestPrice)[0];
+                return <div key={item.id} className="list-item" data-key={item.id} onClick={this.handlerToShow}>
                      <Swiper pagination={true} modules={[Pagination]}>
-                    {item.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
-                </Swiper>
+                        {cheepestCombo.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
+                    </Swiper>
                     <div className="list-item__info">
                         <div className="list-item__prices">
-                            <span>{item.newPrice}</span>
-                            {item.oldPrice === undefined ? null:<span>{item.oldPrice}</span>}
+                            <span>{"от " + cheeapestPrice}</span>
                         </div>
-                        <Popup contentStyle={{width: "300px",height: "150px"}} modal={true} trigger={<button className="list-item__btn-cart"></button>} position="bottom center">
+                        <Popup contentStyle={{width: "300px",height: "200px"}} modal={true} trigger={<button className="list-item__btn-cart"></button>} position="bottom center">
                             <div className="popup-add-cart">
-                                <ChoseClose title={"Размер"} categories={item.variants} extraClass={"popup-chose"} func={this.handlerForChose}/>
+                                {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose}/>)}
                                 <button data-id={item.id} className="popup__btn" onClick={this.handlerForPopupCart}>Добавить в корзину</button>
                             </div>
-                            </Popup>
+                        </Popup>
                     </div>
                     <h3 className="list-item__title">{item.title}</h3>
-                    <ChoseClose title={"Размер"} categories={item.variants} extraClass={"list-chose__close-verison"}/> 
-                </div>)}
+                    {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose}/>)}
+                </div>})}
             </div>
-            <ItemFulllScreen item={this.state.currentItem} status={this.state.statusItem} funcToBack={this.handlerToReturn} funcToCart={this.handlerOpenCart}/> 
+            <ItemFulllScreen data={this.state.currentItem} status={this.state.statusItem} funcToBack={this.handlerToReturn} funcToCart={this.handlerOpenCart} /> 
             <button style={this.state.statusBtn === "close" ? {transform: "scale(0)"}: {transform: "scale(1)"}} className="list-item__main-btn list-item__not-full" onClick={this.handlerOpenCart}>{this.state.currentBtnText}</button>
             <Cart allData={this.dataItems} status={this.state.cartStatus} funcToClose={this.handlerCloseCart} funcRerender={this.rerenderCart}></Cart>
         </div>

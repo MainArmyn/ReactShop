@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Fragment } from "react";
 import saleIcon from '../sale-icon.png';
 import ChoseClose from "./ChoseClose";
-function ItemFulllScreen({item,status,funcToBack,funcToCart}) {
+function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
     if (status === "close") {
         return null;
     }
@@ -46,35 +46,33 @@ function ItemFulllScreen({item,status,funcToBack,funcToCart}) {
         btn.classList.add("list-item__main-btn__active");
         e.target.classList.add("list-item__chose__item__active");
     }
+   
+    let item = data[0];
+    let passiveCombo = data[1];
   return (
     <div className="list-item-full">
         <div style={{display: "block"}}><Swiper pagination={true} modules={[Pagination]}
             className="mySwiper">
-                {item.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
+                {passiveCombo.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
                 <div className="list-item-full__prices">
-            <span>{item.newPrice}</span>
-            {item.oldPrice === undefined ? null:<span>{item.oldPrice}</span>}
+            <span>{passiveCombo.price}</span>
         </div>
         </Swiper></div>
         <div className="list-item-full__btns">
             <button className="list-item-full__btn" onClick={funcToBack}>Каталог</button>
             <button className="cart__btn-out list-item-full__btn" onClick={funcToCart}>Корзина</button>
         </div>
-        {item.oldPrice === undefined ? null:<img className="list-item__sale list-item-full__sale" src={saleIcon} alt=""></img>}
-        <ChoseClose title={"Размеры"} categories={item.variants} func={ChoseClick}/>
+        {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} choosenOne={passiveCombo}/>)}
         <div className="list-item-full__info">
             <div className="list-item-full__text">
-                <span>{item.text}</span>
+                <span>{passiveCombo.text}</span>
             </div>
             <div className="list-item-full__haractiristics">
                 <h1 className="list-item-full__haractiristics__title">Основные характеристики</h1>
-                {item.haracteristics.map(el => <div className="list-item-full__haractiristics__item">
+                {item.characteristics.map(el => <div className="list-item-full__haractiristics__item">
                     <span>{el.title}</span>
                     <span>{el.value}</span>
                 </div>)}
-            </div>
-            <div className="list-item-full__text">
-                <span>Запишись на бесплатное пробное занятие</span>
             </div>
             <span className="list-item-full__logo">
                 Магазин создан с помощью веб-сервиса <a href="">Botique</a>

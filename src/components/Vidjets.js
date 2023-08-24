@@ -5,8 +5,7 @@ function Vidjets({data}) {
        <div className="vidjets-container">
         {data.map(el => 
             <div key={uuid()} className="vidjets-container__item">
-                <img className="vidjets-container__item__img" src={el.src} alt=""></img>
-                <span className="vidjets-container__item__text">{el.text}</span>
+                <img className="vidjets-container__item__img" src={el} alt=""></img>
             </div>
         )}
        </div>
