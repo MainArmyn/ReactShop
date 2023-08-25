@@ -122,16 +122,10 @@ function Cart({allData,status,funcToClose,funcRerender}) {
         return null;
     }
     let number = currentData.length;
-   const clearInfo = countOccurrences(currentData);
-   console.log(clearInfo)
+   const clearInfo = countOccurrences(currentData);//вот здесь все окей данные просто краисво счиатются
    let sum = 0;//формируем сумму всей покупки
    clearInfo.forEach(el => {//вот тут формируем
-    let priceForOne;
-    allData.forEach(item => {
-        if (item.id === el.element.id) {
-            priceForOne = item.newPrice;
-        }
-    })
+    let priceForOne = el.element.info.price
     sum+=(el.count)*Number(priceForOne)
    }) 
     return  (
@@ -153,7 +147,7 @@ function Cart({allData,status,funcToClose,funcRerender}) {
             <div className="cart__list shop" style={cartState}>
                 {clearInfo.map((item,idx,arr) => {
                     let id = item.element.id;
-                    let info = FindCorrect(id);
+                    let info = item.element.info;
                     return (
                         <div className={`cart__list__item ${idx === arr.length - 1 ? 'cart__list__item__last' : ''}`} data-id={id}>
                             <button className="cart__list__item__delete" onClick={DeleteItem}></button>
