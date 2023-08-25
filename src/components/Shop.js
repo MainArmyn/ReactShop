@@ -193,6 +193,19 @@ class Shop extends React.Component {
                                 ,newPrice: "4000",haracteristics: [{title: "Срок годности",value: "3"},{title: "Вес",value: "500гр"},
                                 {title: "Страна производста",value: "Россия"},{title: "Срок годности",value: "3 года"}]}];
     }
+    laodData = async () => {
+        const response = await fetch("http://62.113.105.98:10001//api/v1/store/<store_id>/data/",{
+            method: "GET",
+            headers: {
+                Authorization: 'BOTIQUE_2023_THE_BEST'
+              }
+        });
+        const res = await response.text();
+        console.table(res);
+    }
+    componentDidMount() {
+        this.laodData();
+    }
     render() {//в каждый компонент мы можем передать дополнительнй класс для большей кастомизации
         //таким образом можно дообвлять цвет,рамки и так далее
         return (

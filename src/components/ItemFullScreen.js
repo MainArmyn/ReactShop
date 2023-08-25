@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Fragment } from "react";
 import saleIcon from '../sale-icon.png';
+import { useState } from "react";
 import ChoseClose from "./ChoseClose";
 function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
     if (status === "close") {
@@ -33,11 +34,11 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
     }
     function ChoseClick(e) {
         function Clear() {
-            let item = document.querySelector(".list-item-full");
+            let item = e.target.parentElement;
             let btns = item.querySelector(".list-item__chose__item__active");
             if (btns === null) {
                 return;
-            } 
+            }
            btns.classList.remove("list-item__chose__item__active");
         }
         e.stopPropagation();
@@ -46,9 +47,9 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
         btn.classList.add("list-item__main-btn__active");
         e.target.classList.add("list-item__chose__item__active");
     }
-   
     let item = data[0];
     let passiveCombo = data[1];
+    let [state,setState] = useState({price: passiveCombo.price,text: passiveCombo.text,img: passiveCombo.img});
   return (
     <div className="list-item-full">
         <div style={{display: "block"}}><Swiper pagination={true} modules={[Pagination]}
@@ -62,7 +63,7 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
             <button className="list-item-full__btn" onClick={funcToBack}>Каталог</button>
             <button className="cart__btn-out list-item-full__btn" onClick={funcToCart}>Корзина</button>
         </div>
-        {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} choosenOne={passiveCombo}/>)}
+        {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} choosenOne={passiveCombo} func={ChoseClick}/>)}
         <div className="list-item-full__info">
             <div className="list-item-full__text">
                 <span>{passiveCombo.text}</span>
@@ -78,7 +79,7 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
                 Магазин создан с помощью веб-сервиса <a href="">Botique</a>
             </span>
         </div>
-        <button className="list-item__main-btn" onClick={BtnCartItemFull}>Добавить в корзину</button>
+        <button className="list-item__main-btn list-item__main-btn__active" onClick={BtnCartItemFull}>Добавить в корзину</button>
     </div>
   )
 }

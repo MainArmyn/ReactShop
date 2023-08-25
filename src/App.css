@@ -265,6 +265,10 @@
   flex-wrap: wrap;
 }
 
+.list-item__info {
+  align-items: center;
+}
+
 
 
 .swiper {
@@ -579,6 +583,7 @@
 
 .popup-chose {
   width: 100%;
+  margin-bottom: -15px;
 }
 
 .popup__btn {

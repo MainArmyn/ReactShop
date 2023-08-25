@@ -89,7 +89,6 @@ class ItemList extends React.Component {
         e.stopPropagation();
         Clear();
         let btn = e.target.parentElement.parentElement.parentElement.children[1];
-        btn.classList.add("popup__btn__active");
         e.target.classList.add("list-item__chose__item__active");
     }
 
@@ -151,13 +150,13 @@ class ItemList extends React.Component {
                         </div>
                         <Popup contentStyle={{width: "300px",height: "200px"}} modal={true} trigger={<button className="list-item__btn-cart"></button>} position="bottom center">
                             <div className="popup-add-cart">
-                                {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose}/>)}
-                                <button data-id={item.id} className="popup__btn" onClick={this.handlerForPopupCart}>Добавить в корзину</button>
+                                {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose} choosenOne={cheepestCombo}/>)}
+                                <button data-id={item.id} className="popup__btn popup__btn__active" onClick={this.handlerForPopupCart}>Добавить в корзину</button>
                             </div>
                         </Popup>
                     </div>
-                    <h3 className="list-item__title">{item.title}</h3>
-                    {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose}/>)}
+                    <h3 className="list-item__title">{cheepestCombo.name}</h3>
+                    {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} />)}
                 </div>})}
             </div>
             <ItemFulllScreen data={this.state.currentItem} status={this.state.statusItem} funcToBack={this.handlerToReturn} funcToCart={this.handlerOpenCart} /> 
