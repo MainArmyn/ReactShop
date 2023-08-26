@@ -47,9 +47,9 @@ class ItemList extends React.Component {
         e.stopPropagation();
         let ident = e.currentTarget.dataset.key;
         this.dataItems.forEach(el => {
-            if (el.id === ident) {
-                let cheeapestPrice = Math.min.apply(null, el.combos.map(item => Number(item.price)));//это мы будем писать от чего то есть цена
-                let cheepestCombo = el.combos.filter(item => Number(item.price) === cheeapestPrice)[0];
+            if (el["product_id"] === ident) {
+                let cheeapestId = e.currentTarget.dataset.combo;//это мы будем писать от чего то есть цена
+                let cheepestCombo = el.combos.filter(item => item.id === cheeapestId)[0];
                 this.setState({statusItem: "open",currentItem: [el,cheepestCombo],listItems: "list-items__non-active"});
                 return;
             }
@@ -138,11 +138,12 @@ class ItemList extends React.Component {
             </ul>
             <div className={`list-items ${this.state.listItems}`}>
                 {this.state.items.map((item,idx) => {
+                    item.combos = item.combos.filter(thing => thing.stock != 0);
                     let cheeapestPrice = Math.min.apply(null, item.combos.map(el => Number(el.price)));//это мы будем писать от чего то есть цена
                     let cheepestCombo = item.combos.filter(el => Number(el.price) === cheeapestPrice)[0];
-                return <div key={item.id} className="list-item" data-key={item.id} onClick={this.handlerToShow}>
+                return <div key={item["product_id"]} className="list-item" data-key={item["product_id"]} data-combo={cheepestCombo.id} onClick={this.handlerToShow}>
                      <Swiper pagination={true} modules={[Pagination]}>
-                        {cheepestCombo.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
+                        {cheepestCombo.photos.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
                     </Swiper>
                     <div className="list-item__info">
                         <div className="list-item__prices">
@@ -150,13 +151,13 @@ class ItemList extends React.Component {
                         </div>
                         <Popup contentStyle={{width: "300px",height: "200px"}} modal={true} trigger={<button className="list-item__btn-cart"></button>} position="bottom center">
                             <div className="popup-add-cart">
-                                {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose} choosenOne={cheepestCombo}/>)}
+                                {Object.values(item.variants).map(el => el.options[0] === "" ? null:<ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose} choosenOne={cheepestCombo}/>)}
                                 <button data-id={item.id} className="popup__btn popup__btn__active" onClick={this.handlerForPopupCart}>Добавить в корзину</button>
                             </div>
                         </Popup>
                     </div>
                     <h3 className="list-item__title">{cheepestCombo.name}</h3>
-                    {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} />)}
+                    {Object.values(item.variants).map(el => el.options[0] === "" ? null:<ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose} choosenOne={cheepestCombo}/>)}
                 </div>})}
             </div>
             <ItemFulllScreen data={this.state.currentItem} status={this.state.statusItem} funcToBack={this.handlerToReturn} funcToCart={this.handlerOpenCart} /> 

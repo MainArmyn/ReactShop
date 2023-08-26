@@ -25,7 +25,6 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
                 }); 
                 if (localStorage.getItem("[]") === null) {
                     let arr = [];
-                    console.log("winnner");
                     arr.push({id,info});//здесь надо поправить что мы отправляем айди и просто выбранный размер без всего остального
                     localStorage.setItem("[]",JSON.stringify(arr));
                     e.target.textContent = "Оформить заказ(1)";   
@@ -102,7 +101,7 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
     <div className="list-item-full">
         <div style={{display: "block"}}><Swiper pagination={true} modules={[Pagination]}
             className="mySwiper">
-                {stat.img === '' ? passiveCombo.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>):stat.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
+                {stat.img === '' ? passiveCombo.photos.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>):stat.img.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
                 <div className="list-item-full__prices">
             <span>{stat.price === '' ? passiveCombo.price:stat.price}</span>
         </div>
@@ -111,7 +110,7 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
             <button className="list-item-full__btn" onClick={funcToBack}>Каталог</button>
             <button className="cart__btn-out list-item-full__btn" onClick={funcToCart}>Корзина</button>
         </div>
-        {Object.values(item.variants).map(el => <ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} choosenOne={passiveCombo} func={ChoseClick}/>)}
+        {Object.values(item.variants).map(el => el.options[0] === "" ? null:<ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} choosenOne={passiveCombo} func={ChoseClick}/>)}
         <div className="list-item-full__info">
             <div className="list-item-full__text">
                 <span>{stat.text === '' ? passiveCombo.text:stat.text}</span>
@@ -119,7 +118,7 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
             <div className="list-item-full__haractiristics">
                 <h1 className="list-item-full__haractiristics__title">Основные характеристики</h1>
                 {item.characteristics.map(el => <div className="list-item-full__haractiristics__item">
-                    <span>{el.title}</span>
+                    <span>{el.name}</span>
                     <span>{el.value}</span>
                 </div>)}
             </div>

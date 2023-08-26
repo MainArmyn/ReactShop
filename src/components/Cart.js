@@ -11,7 +11,7 @@ function Cart({allData,status,funcToClose,funcRerender}) {
         setState({display: "none"})
     }
     function removeOnce(array, value) {
-        const index = array.findIndex((element) => element.id === value.id && element.choosen === value.choosen);
+        const index = array.findIndex((element) => element.id === value.id && element.info === value.info);
         if (index !== -1) {
           array.splice(index, 1);
         }
@@ -19,7 +19,7 @@ function Cart({allData,status,funcToClose,funcRerender}) {
       }
 
       function addAndInsert(array, element) {
-        const index = array.findIndex((el) => el.id === element.id && el.name === element.name);
+        const index = array.findIndex((el) => el.id === element.id && el.info === element.info);
         if (index !== -1) {
           array.splice(index + 1, 0, element);
         } else {
@@ -43,9 +43,9 @@ function Cart({allData,status,funcToClose,funcRerender}) {
 
     function handlerForPlus(e) {
         let items = JSON.parse(localStorage.getItem("[]"));
-        let choosen = e.target.parentElement.parentElement.parentElement.parentElement.querySelector(".list-item__chose__item").textContent;
         let id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
-        let newArr = addAndInsert(items,{id,choosen})
+        let info =  e.target.parentElement.parentElement.parentElement.parentElement.dataset.info;
+        let newArr = addAndInsert(items,{id,info})
         localStorage.setItem("[]",JSON.stringify(newArr))
         funcRerender();
     }
@@ -54,9 +54,9 @@ function Cart({allData,status,funcToClose,funcRerender}) {
             return;
         } 
         let items = JSON.parse(localStorage.getItem("[]"));
-        let choosen = e.target.parentElement.parentElement.parentElement.parentElement.querySelector(".list-item__chose__item").textContent;
         let id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
-        let value = {id,choosen};
+        let info = e.target.parentElement.parentElement.parentElement.parentElement.dataset.info;
+        let value = {id,info};
         let newArr = removeOnce(items,value);
         console.log(newArr);
         localStorage.setItem("[]",JSON.stringify(newArr));
@@ -148,14 +148,17 @@ function Cart({allData,status,funcToClose,funcRerender}) {
                 {clearInfo.map((item,idx,arr) => {
                     let id = item.element.id;
                     let info = item.element.info;
+                    let supreme = FindCorrect(id);
                     return (
-                        <div className={`cart__list__item ${idx === arr.length - 1 ? 'cart__list__item__last' : ''}`} data-id={id}>
+                        <div className={`cart__list__item ${idx === arr.length - 1 ? 'cart__list__item__last' : ''}`} data-id={id} data-info={info}>
                             <button className="cart__list__item__delete" onClick={DeleteItem}></button>
                     <div className="cart__list__item__img-category">
-                        <img src={info.img[0]} className="cart__list__item__img" alt=""></img>
-                        <ChoseClose title={"Размер"} categories={[item.element.choosen]} extraClass={"cart__list__item__category"}/>
+                        <img src={info.photos[0]} className="cart__list__item__img" alt=""></img>
+                        <div style={{display: "flex",flexDirection: "column"}}>
+                            {Object.values(supreme.variants).map((thing,idx) => <ChoseClose title={thing.name} categories={[Object.values(info)[idx]]} extraClass={"cart__list__item__category"}/>)}
+                        </div>
                     </div>
-                    <span className="cart__list__item__title">{info.title}</span>
+                    <span className="cart__list__item__title">{info.name}</span>
                     <div className="cart__list__item__prices">
                         <div className="cart__list__item__prices-container">
                             <div className="cart__list__item__count-container">
@@ -167,12 +170,11 @@ function Cart({allData,status,funcToClose,funcRerender}) {
                                 </button>
                             </div>
                             <div>
-                                <span className="cart__list__item__all-price">{Number(info.newPrice)*item.count}</span>
-                                {info.oldPrice === undefined ? null:<span className="cart__list__item__oldPrice">{Number(info.oldPrice)*item.count}</span>}
+                                <span className="cart__list__item__all-price">{Number(info.price)*item.count}</span>
                             </div>
                             
                         </div>
-                        {item.count > 1 ? <span className="cart__list__item__current-price">{info.newPrice}
+                        {item.count > 1 ? <span className="cart__list__item__current-price">{info.price}
                         </span>:null}
                     </div>
                 </div>
