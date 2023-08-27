@@ -5,13 +5,13 @@ import { Fragment } from "react";
 import 'reactjs-popup/dist/index.css';
 import { useState } from 'react';
 import Ordering from "./Ordering";
-function Cart({allData,status,funcToClose,funcRerender}) {
+function Cart({allData,status,funcToClose,funcRerender,funcChangeStock,inserStock}) {
     function CloseAll() {
         cartSetState({display: "flex"})
         setState({display: "none"})
     }
     function removeOnce(array, value) {
-        const index = array.findIndex((element) => element.id === value.id && element.info === value.info);
+        const index = array.findIndex((element) => element.id === value.id && element.info.id === value.info);
         if (index !== -1) {
           array.splice(index, 1);
         }
@@ -34,7 +34,7 @@ function Cart({allData,status,funcToClose,funcRerender}) {
     function FindCorrect(id) {
         let info;
         allData.forEach(el => {
-            if (el.id === id) {
+            if (el["product_id"] === id) {
                 info = el;
             }
         })
@@ -44,7 +44,7 @@ function Cart({allData,status,funcToClose,funcRerender}) {
     function handlerForPlus(e) {
         let items = JSON.parse(localStorage.getItem("[]"));
         let id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
-        let info =  e.target.parentElement.parentElement.parentElement.parentElement.dataset.info;
+        let info =  JSON.parse(e.target.parentElement.parentElement.parentElement.parentElement.dataset.info);
         let newArr = addAndInsert(items,{id,info})
         localStorage.setItem("[]",JSON.stringify(newArr))
         funcRerender();
@@ -55,10 +55,11 @@ function Cart({allData,status,funcToClose,funcRerender}) {
         } 
         let items = JSON.parse(localStorage.getItem("[]"));
         let id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
-        let info = e.target.parentElement.parentElement.parentElement.parentElement.dataset.info;
+        let info =  e.target.parentElement.parentElement.parentElement.parentElement.dataset.info;
         let value = {id,info};
         let newArr = removeOnce(items,value);
         console.log(newArr);
+        funcChangeStock(id,info,"+");
         localStorage.setItem("[]",JSON.stringify(newArr));
         funcRerender();
     }
@@ -83,7 +84,7 @@ function Cart({allData,status,funcToClose,funcRerender}) {
       function removeDuplicates(array, value) {
         for (let i = array.length - 1; i >= 0; i--) {
           const element = array[i];
-          if (element.id === value.id && element.choosen === value.choosen) {
+          if (element.id === value.id && element.info.id === value.info) {
             array.splice(i, 1);
           }
         }
@@ -94,14 +95,18 @@ function Cart({allData,status,funcToClose,funcRerender}) {
 
     function DeleteItem(e) {
         let items = JSON.parse(localStorage.getItem("[]"));
-        let choosen = e.target.parentElement.querySelector(".list-item__chose__item").textContent;
         let id = e.target.parentElement.dataset.id;
-        let value = {id,choosen};
+        let info = e.target.parentElement.dataset.info;
+        let howManyTimes = Number(e.target.parentElement.dataset.count);
+        funcChangeStock(id,info,"+",howManyTimes);
+        let value = {id,info};
         let newArr = removeDuplicates(items,value);
         localStorage.setItem("[]",JSON.stringify(newArr));
         funcRerender();
 
     }
+
+    
 
     function OpenForm(e) {
         setState({display: "flex"});
@@ -122,6 +127,8 @@ function Cart({allData,status,funcToClose,funcRerender}) {
         return null;
     }
     let number = currentData.length;
+    currentData.forEach(thing => delete thing.info.stock)//важно при подсчете не учитывать количество на складе потому что так нужно
+    console.log(currentData);
    const clearInfo = countOccurrences(currentData);//вот здесь все окей данные просто краисво счиатются
    let sum = 0;//формируем сумму всей покупки
    clearInfo.forEach(el => {//вот тут формируем
@@ -150,12 +157,12 @@ function Cart({allData,status,funcToClose,funcRerender}) {
                     let info = item.element.info;
                     let supreme = FindCorrect(id);
                     return (
-                        <div className={`cart__list__item ${idx === arr.length - 1 ? 'cart__list__item__last' : ''}`} data-id={id} data-info={info}>
+                        <div className={`cart__list__item ${idx === arr.length - 1 ? 'cart__list__item__last' : ''}`} data-id={id} data-info={info.id} data-count={item.count}>
                             <button className="cart__list__item__delete" onClick={DeleteItem}></button>
                     <div className="cart__list__item__img-category">
                         <img src={info.photos[0]} className="cart__list__item__img" alt=""></img>
                         <div style={{display: "flex",flexDirection: "column"}}>
-                            {Object.values(supreme.variants).map((thing,idx) => <ChoseClose title={thing.name} categories={[Object.values(info)[idx]]} extraClass={"cart__list__item__category"}/>)}
+                            {Object.values(supreme.variants).map((thing,idx) => thing.options[0] === "" ? null:<ChoseClose title={thing.name} categories={[Object.values(info)[idx+1]]} extraClass={"cart__list__item__category"}/>)}
                         </div>
                     </div>
                     <span className="cart__list__item__title">{info.name}</span>

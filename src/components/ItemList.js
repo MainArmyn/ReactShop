@@ -25,6 +25,7 @@ class ItemList extends React.Component {
         this.categories = ["Все",...Array.from(new Set(this.dataItems.map(el => el.category)))];//категории формируются взависимости от переданных элементов
         this.state = {items: this.dataItems,categories: this.categories.map(item => <li key={uuid()} className="category-list__item" onClick={this.handlerForCategory}>{item}</li>),statusItem: "close",currentItem: null,listItems: "",statusBtn: "close",currentBtnText: "",cartStatus: "close"};
         this.count  = 0;
+        this.comboCopy = [];
     }
 
     handlerForCategory = (e) => {
@@ -129,6 +130,40 @@ class ItemList extends React.Component {
         this.setState({cartStatus: "open",listItems: "list-items__non-active",statusBtn: "close",statusItem: "close",currentItem: ""});
     }
 
+    changeStock = (productId,comboId,operator,howManyTimes) => {
+        howManyTimes = howManyTimes === undefined ? 1:howManyTimes;
+         this.dataItems.forEach((el,idx,arr) => {
+            if (el["product_id"] === productId) {
+                for (let comb of el.combos) {
+                    if (comb.id === comboId && Number(comb.stock) !== 0) {
+                        comb.stock = operator === "+" ? Number(comb.stock)+howManyTimes:Number(comb.stock)-howManyTimes;
+                        if (comb.stock === 0) {
+                            this.comboCopy.push(comb);
+                        }
+                        console.log(comb.stock);
+                    } 
+                }
+            }
+        })
+        this.setState({items: this.dataItems});
+    }
+    insertBackStock = (productId,comboId,count) =>{
+        let info;
+        alert(this.comboCopy);
+        this.comboCopy.forEach(thing => {
+            if (thing.id === comboId) {
+                info = thing;
+            }
+        })
+        info.stock = count;
+        this.dataItems.forEach(prod => {
+            if (prod["product_id"] === productId) {
+                prod.combos.push(info);
+            }
+        })
+    }
+    
+
    
     render() {
         return (
@@ -138,7 +173,7 @@ class ItemList extends React.Component {
             </ul>
             <div className={`list-items ${this.state.listItems}`}>
                 {this.state.items.map((item,idx) => {
-                    item.combos = item.combos.filter(thing => thing.stock != 0);
+                    item.combos = item.combos.filter(thing => Number(thing.stock) !== 0);
                     let cheeapestPrice = Math.min.apply(null, item.combos.map(el => Number(el.price)));//это мы будем писать от чего то есть цена
                     let cheepestCombo = item.combos.filter(el => Number(el.price) === cheeapestPrice)[0];
                 return <div key={item["product_id"]} className="list-item" data-key={item["product_id"]} data-combo={cheepestCombo.id} onClick={this.handlerToShow}>
@@ -160,9 +195,9 @@ class ItemList extends React.Component {
                     {Object.values(item.variants).map(el => el.options[0] === "" ? null:<ChoseClose title={el.name} categories={el.options} extraClass={"popup-chose"} func={this.handlerForChose} choosenOne={cheepestCombo}/>)}
                 </div>})}
             </div>
-            <ItemFulllScreen data={this.state.currentItem} status={this.state.statusItem} funcToBack={this.handlerToReturn} funcToCart={this.handlerOpenCart} /> 
+            <ItemFulllScreen data={this.state.currentItem} status={this.state.statusItem} funcToBack={this.handlerToReturn} funcToCart={this.handlerOpenCart} funcToChangeStock={this.changeStock}/> 
             <button style={this.state.statusBtn === "close" ? {transform: "scale(0)"}: {transform: "scale(1)"}} className="list-item__main-btn list-item__not-full" onClick={this.handlerOpenCart}>{this.state.currentBtnText}</button>
-            <Cart allData={this.dataItems} status={this.state.cartStatus} funcToClose={this.handlerCloseCart} funcRerender={this.rerenderCart}></Cart>
+            <Cart allData={this.dataItems} status={this.state.cartStatus} funcToClose={this.handlerCloseCart} funcRerender={this.rerenderCart} funcChangeStock={this.changeStock} inserStock={this.insertBackStock}></Cart>
         </div>
             
         )

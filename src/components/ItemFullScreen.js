@@ -6,14 +6,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Fragment } from "react";
 import saleIcon from '../sale-icon.png';
 import ChoseClose from "./ChoseClose";
-function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
+function ItemFulllScreen({data,status,funcToBack,funcToCart,funcToChangeStock}) {
     let [stat,setStat] = useState({price: "",text: "",img: ""});
     if (status === "close") {
         return null;
     }
     function BtnCartItemFull(e) {
         if (e.target.classList.contains("list-item__main-btn__active") && e.target.textContent === "Добавить в корзину") {
-            let id = item.id;
+            let id = item["product_id"];
             let actives = [...document.querySelector(".list-item-full").querySelectorAll(".list-item__chose__item__active")];
             let op1 = actives[0].textContent;//получаем значения наших выбарнных на данный момент штучек 
             if (actives.length === 1) {
@@ -22,9 +22,11 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
                     if (element.opt1 === op1) {
                         info = element;
                     }   
-                }); 
+                });
+                funcToChangeStock(item["product_id"],info.id,"-");
                 if (localStorage.getItem("[]") === null) {
                     let arr = [];
+                   
                     arr.push({id,info});//здесь надо поправить что мы отправляем айди и просто выбранный размер без всего остального
                     localStorage.setItem("[]",JSON.stringify(arr));
                     e.target.textContent = "Оформить заказ(1)";   
@@ -32,6 +34,7 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
                         let oldArr = JSON.parse(localStorage.getItem("[]"));
                         let number = oldArr.length;
                         e.target.textContent = `Оформить заказ(${number+1})`;
+                       
                         oldArr.push({id,info});
                         localStorage.setItem("[]",JSON.stringify(oldArr));
         
@@ -39,14 +42,16 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
             } else {
                 let op2 = actives[1].textContent;
                 let info;
+                
                 item.combos.forEach(element => {
                     if (element.opt1 === op1 && element.opt2 === op2) {
                         info = element;
                     }   
                 });
+                funcToChangeStock(item["product_id"],info.id,"-");
                 if (localStorage.getItem("[]") === null) {
                     let arr = [];
-                    console.log("winnner");
+                   
                     arr.push({id,info});//здесь надо поправить что мы отправляем айди и просто выбранный размер без всего остального
                     localStorage.setItem("[]",JSON.stringify(arr));
                     e.target.textContent = "Оформить заказ(1)";   
@@ -54,6 +59,7 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
                         let oldArr = JSON.parse(localStorage.getItem("[]"));
                         let number = oldArr.length;
                         e.target.textContent = `Оформить заказ(${number+1})`;
+                       
                         oldArr.push({id,info});
                         localStorage.setItem("[]",JSON.stringify(oldArr));
         
@@ -66,20 +72,35 @@ function ItemFulllScreen({data,status,funcToBack,funcToCart}) {
     function FindUpdate() {
         let actives = [...document.querySelector(".list-item-full").querySelectorAll(".list-item__chose__item__active")];
         let op1 = actives[0].textContent;//получаем значения наших выбарнных на данный момент штучек 
-        let op2 = actives[1].textContent;
         let info;
-        item.combos.forEach(element => {
-            if (element.opt1 === op1 && element.opt2 === op2) {
-                info = element;
-            }   
-        });
+        if (actives[1] === undefined) {
+            item.combos.forEach(element => {
+                if (element.opt1 === op1) {
+                    info = element;
+                }   
+            });
+            let el = document.querySelector(".list-item-full").querySelector(".list-item__main-btn");
+            if (info === undefined || Number(info.stock) === 0) {
+                el.classList.remove("list-item__main-btn__active");
+                return;
+            }
+            el.classList.add("list-item__main-btn__active");
+            setStat({price: info.price,text: info.text,img: info.photos});
+        } else {
+            let op2 = actives[1].textContent;
+            item.combos.forEach(element => {
+                if (element.opt1 === op1 && element.opt2 === op2) {
+                    info = element;
+                }   
+            });
         let el = document.querySelector(".list-item-full").querySelector(".list-item__main-btn");
-        if (info === undefined) {
+        if (info === undefined || Number(info.stock) === 0) {
             el.classList.remove("list-item__main-btn__active");
             return;
         }
         el.classList.add("list-item__main-btn__active");
-        setStat({price: info.price,text: info.text,img: info.img});
+        setStat({price: info.price,text: info.text,img: info.photos});
+        }
     }
     function ChoseClick(e) {
         function Clear() {
