@@ -18,12 +18,18 @@ function Cart({allData,status,funcToClose,funcRerender,funcChangeStock,inserStoc
         return array;
       }
 
-      function addAndInsert(array, element) {
-        const index = array.findIndex((el) => el.id === element.id && el.info === element.info);
+      function addAndInsert(array, value) {
+        let result;
+        const index = array.findIndex((el) => el.id === value.id && el.info.id === value.info);
+        array.forEach(thing => {
+            if (thing.id === value.id && thing.info.id === value.info)   {
+                result = thing;
+            }
+        })
         if (index !== -1) {
-          array.splice(index + 1, 0, element);
+          array.splice(index + 1, 0, result);
         } else {
-          array.push(element);
+          array.push(result);
         }
         return array;
       }
@@ -42,11 +48,14 @@ function Cart({allData,status,funcToClose,funcRerender,funcChangeStock,inserStoc
     }
 
     function handlerForPlus(e) {
+        let id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;//это продукта 
+        let info =  e.target.parentElement.parentElement.parentElement.parentElement.dataset.info;
+        if (funcChangeStock(id,info,"-") === false) {
+            return;
+        }
         let items = JSON.parse(localStorage.getItem("[]"));
-        let id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
-        let info =  JSON.parse(e.target.parentElement.parentElement.parentElement.parentElement.dataset.info);
-        let newArr = addAndInsert(items,{id,info})
-        localStorage.setItem("[]",JSON.stringify(newArr))
+        let newArr = addAndInsert(items,{id,info});
+        localStorage.setItem("[]",JSON.stringify(newArr));
         funcRerender();
     }
     function handlerForMinus(e) {
@@ -56,10 +65,12 @@ function Cart({allData,status,funcToClose,funcRerender,funcChangeStock,inserStoc
         let items = JSON.parse(localStorage.getItem("[]"));
         let id = e.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
         let info =  e.target.parentElement.parentElement.parentElement.parentElement.dataset.info;
+        let count  = e.target.parentElement.parentElement.parentElement.parentElement.dataset.count;
         let value = {id,info};
         let newArr = removeOnce(items,value);
         console.log(newArr);
         funcChangeStock(id,info,"+");
+        inserStock(id,info,1);
         localStorage.setItem("[]",JSON.stringify(newArr));
         funcRerender();
     }
@@ -99,6 +110,7 @@ function Cart({allData,status,funcToClose,funcRerender,funcChangeStock,inserStoc
         let info = e.target.parentElement.dataset.info;
         let howManyTimes = Number(e.target.parentElement.dataset.count);
         funcChangeStock(id,info,"+",howManyTimes);
+        inserStock(id,info,howManyTimes);
         let value = {id,info};
         let newArr = removeDuplicates(items,value);
         localStorage.setItem("[]",JSON.stringify(newArr));

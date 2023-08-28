@@ -3,17 +3,17 @@
     --logo-path: url(./logo.svg);
     --logo-text-color: black;/* область логотипа */
     --logo-font-family: Helvetica;
-    --logo-background-color: rgba(171, 9, 9, 0.538);
+    --logo-background-color: rgb(255, 255, 255);
     
-    --item-list-background: rgb(101, 56, 56);/*имеется ввиду вся область с товарами какой будет фон*/
-    --item-list-category-text-color: rgb(105, 128, 0);/*имеется ввиду как будет вот эта полоска с категориями*/
+    --item-list-background: white;/*имеется ввиду вся область с товарами какой будет фон*/
+    --item-list-category-text-color: rgb(0, 0, 0);/*имеется ввиду как будет вот эта полоска с категориями*/
     --item-list-category-font-family: Arial;
-    --item-list-category-border-color: rgb(0, 9, 128);
+    --item-list-category-border-color: black;
 
     --item-text-color: rgb(0, 0, 0);/*имеется ввиду сама краточка товара*/
     --item-font-family: Arial;
-    --item-fullView-text-background: rgb(255, 0, 17);/* имеется ввиду когда товар развернут*/
+    --item-fullView-text-background: rgb(255, 255, 255);/* имеется ввиду когда товар развернут*/
     --item-fullView-description-text-color: rgb(0, 0, 0);
-    --item-fullView-description-border-color: rgb(53, 0, 128);
+    --item-fullView-description-border-color: black;
     --all-btns-fontFamily: "Helvetica";
 }

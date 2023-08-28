@@ -3,16 +3,13 @@ import Vidjets from "./Vidjets";
 import ItemList from "./ItemList";
 import LogoShop from "./LogoShop";
 import dostavka from "../dostavka.svg";
+import animate from "../animation.png";
 import { v4 as uuid} from 'uuid';
 import log from "../Flower.svg";
 class Shop extends React.Component {
-    constructor(props) {//я решил что пусть у магазина будет один цвет и он будет указыаться при создании
+    constructor(props) {
         super(props);
         localStorage.clear();
-        this.cart = [];//это будет корзина нашего пользователя есть вариант хранить корзину в локалном хранилище но пока думаю над этим
-        this.dataLogo = {logo: log,
-        text: "Интернет-магазин цветов для вас! Более 500 видов цветов и готовых композиций ..."
-            ,title: "Flower Boutique"};//данные для логотипа и для навзвния магазина
         this.store =
         {
             store_info: {
@@ -137,7 +134,7 @@ class Shop extends React.Component {
                             ]
                         }
                     },
-                    combos: [
+                    combos: [//миниум должно быть живых две комбинации это важно !!!
                         {
                             id: "a3335eec-08d0-45b1-b462-7344786d2f83",
                             name: "Футболка",
@@ -147,16 +144,26 @@ class Shop extends React.Component {
                             stock: 0,
                             photos: []},
                             {
-                                id: "a2335eec-08d0-45b1-b462-7344786d2f83",
+                                id: "a2315eec-08d0-45b1-b462-7344786d2f83",
                                 opt1: "Черный",
                                 name: "Худи",
                                 text: "Турецкая модная худи",
                                 old_price: "3000",
                                 price: "2500",
                                 stock: 4,
-                                photos: [log,dostavka,log]}
+                                photos: [log,dostavka,log]},
+                                {
+                                    id: "a2325eec-08d0-46b1-b462-7344786d2f83",
+                                    opt1: "Белый",
+                                    name: "Боб",
+                                    text: "Турецкая модная хуцотасцусу",
+                                    old_price: "3000",
+                                    price: "1500",
+                                    stock: 5,
+                                    photos: [log,dostavka,log]}
                     ]
-                    }]}
+                    }]};
+        this.state = {data: null};
     }
     /*laodData = async () => {
         const response = await fetch("http://62.113.105.98:10001/api/v1/store/eac9c788-9599-4cc0-aba5-0b5508a04692/data/",{
@@ -166,18 +173,28 @@ class Shop extends React.Component {
               }
         });
         const res = await response.json();
-        console.log(res);
+        this.setState({data: res});
     }*/
+    justForAnimation = () => {
+        setTimeout(() => {
+            this.setState({data: this.store})
+        },3 * 1000)
+    }
     componentDidMount() {
         //this.laodData();
+        this.justForAnimation();
     }
-    render() {//в каждый компонент мы можем передать дополнительнй класс для большей кастомизации
-        //таким образом можно дообвлять цвет,рамки и так далее
+    render() {
+        if (this.state.data === null) {
+            return <div className="animation-container">
+                    <img src={animate} className="animation-loading" alt="логотип"></img>
+                </div>
+        }
         return (
             <div className="shop">
-                <Vidjets data={this.store.banners}/>
-                <LogoShop title={this.store["store_info"].name} text={this.store["store_info"].description} />
-                <ItemList data={this.store.products}/>
+                <Vidjets data={this.state.data.banners}/>
+                <LogoShop title={this.state.data["store_info"].name} text={this.state.data["store_info"].description} />
+                <ItemList data={this.state.data.products}/>
             </div>     
         )
     }

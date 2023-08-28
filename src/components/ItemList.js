@@ -132,6 +132,7 @@ class ItemList extends React.Component {
 
     changeStock = (productId,comboId,operator,howManyTimes) => {
         howManyTimes = howManyTimes === undefined ? 1:howManyTimes;
+        let flag = false;
          this.dataItems.forEach((el,idx,arr) => {
             if (el["product_id"] === productId) {
                 for (let comb of el.combos) {
@@ -139,22 +140,32 @@ class ItemList extends React.Component {
                         comb.stock = operator === "+" ? Number(comb.stock)+howManyTimes:Number(comb.stock)-howManyTimes;
                         if (comb.stock === 0) {
                             this.comboCopy.push(comb);
+                        } else {
+                            this.comboCopy.forEach((ui,indx,Arr) => {
+                                if (ui.id === comboId) {
+                                    delete Arr[indx];
+                                }
+                            })
                         }
                         console.log(comb.stock);
+                        flag = true;
                     } 
                 }
             }
         })
         this.setState({items: this.dataItems});
+        return flag;
     }
     insertBackStock = (productId,comboId,count) =>{
         let info;
-        alert(this.comboCopy);
         this.comboCopy.forEach(thing => {
             if (thing.id === comboId) {
                 info = thing;
             }
         })
+        if (info === undefined) {
+            return false;
+        }
         info.stock = count;
         this.dataItems.forEach(prod => {
             if (prod["product_id"] === productId) {
@@ -162,6 +173,24 @@ class ItemList extends React.Component {
             }
         })
     }
+    findMinPriceObject = (objects) => {
+        if (objects.length === 0) {
+          return null;
+        }
+      
+        let minPriceObject = objects[0];
+        let minPrice = objects[0].price;
+      
+        for (let i = 1; i < objects.length; i++) {
+          if (objects[i].price < minPrice) {
+            minPrice = objects[i].price;
+            minPriceObject = objects[i];
+          }
+        }
+      
+        return minPriceObject;
+      }
+      
     
 
    
@@ -174,15 +203,14 @@ class ItemList extends React.Component {
             <div className={`list-items ${this.state.listItems}`}>
                 {this.state.items.map((item,idx) => {
                     item.combos = item.combos.filter(thing => Number(thing.stock) !== 0);
-                    let cheeapestPrice = Math.min.apply(null, item.combos.map(el => Number(el.price)));//это мы будем писать от чего то есть цена
-                    let cheepestCombo = item.combos.filter(el => Number(el.price) === cheeapestPrice)[0];
+                    let cheepestCombo = this.findMinPriceObject(item.combos);   
                 return <div key={item["product_id"]} className="list-item" data-key={item["product_id"]} data-combo={cheepestCombo.id} onClick={this.handlerToShow}>
                      <Swiper pagination={true} modules={[Pagination]}>
                         {cheepestCombo.photos.map(el => <SwiperSlide><img src={el} alt=""></img></SwiperSlide>)}
                     </Swiper>
                     <div className="list-item__info">
                         <div className="list-item__prices">
-                            <span>{"от " + cheeapestPrice}</span>
+                            <span>{"от " + cheepestCombo.price}</span>
                         </div>
                         <Popup contentStyle={{width: "300px",height: "200px"}} modal={true} trigger={<button className="list-item__btn-cart"></button>} position="bottom center">
                             <div className="popup-add-cart">
